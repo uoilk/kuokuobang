@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>扩扩帮</title>
+<style>
+    /* 基础重置 */
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background-color: #e0e0e0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    /* 手机外框模拟 */
+    .phone-mockup {
+        width: 375px;
+        height: 812px;
+        background-color: #fff;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    /* 顶部状态栏模拟 */
+    .status-bar {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 20px 5px;
+        font-size: 12px;
+        font-weight: 500;
+        color: #000;
+    }
+    .status-icons {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+    }
+    .signal-bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 2px;
+        height: 10px;
+    }
+    .signal-bars div {
+        width: 3px;
+        background-color: #000;
+        border-radius: 1px;
+    }
+    .signal-bars div:nth-child(1) { height: 4px; }
+    .signal-bars div:nth-child(2) { height: 6px; }
+    .signal-bars div:nth-child(3) { height: 8px; }
+    .signal-bars div:nth-child(4) { height: 10px; }
+    .battery {
+        width: 22px;
+        height: 10px;
+        border: 1px solid #000;
+        border-radius: 3px;
+        position: relative;
+        padding: 1px;
+    }
+    .battery::after {
+        content: '';
+        position: absolute;
+        right: -3px;
+        top: 2px;
+        width: 2px;
+        height: 4px;
+        background: #000;
+        border-radius: 0 1px 1px 0;
+    }
+    .battery-level {
+        width: 90%;
+        height: 100%;
+        background: #000;
+        border-radius: 1px;
+    }
+
+    /* 导航栏 */
+    .nav-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px 15px;
+        height: 44px;
+        background: #fff;
+        position: relative;
+        z-index: 10;
+    }
+    .back-btn-img {
+        width: 12px;
+        height: 20px;
+        object-fit: contain;
+        margin-left: 5px;
+    }
+    .nav-title {
+        font-size: 17px;
+        font-weight: 500;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    /* 新增：右侧广播图标样式 */
+    .broadcast-icon {
+        width: 18px;
+        height: 18px;
+        object-fit: contain;
+    }
+    .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        padding: 4px 8px;
+        background: #f8f8f8;
+    }
+    .more-dots {
+        display: flex;
+        gap: 2px;
+    }
+    .more-dots span {
+        width: 3px;
+        height: 3px;
+        background: #333;
+        border-radius: 50%;
+    }
+    .circle-btn {
+        width: 14px;
+        height: 14px;
+        border: 2px solid #333;
+        border-radius: 50%;
+        position: relative;
+    }
+    .circle-btn::after {
+        content: '';
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 4px;
+        height: 4px;
+        background: #333;
+        border-radius: 50%;
+    }
+
+    /* 蓝色背景区域 - 替换为图5背景底纹 */
+    .blue-bg {
+        /* 保留渐变作为备用，同时叠加图5 */
+        background: linear-gradient(180deg, #7B9FF9 0%, #8DB2FC 100%);
+        background-image: url('5.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: calc(100% - 95px);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* 顶部 Logo 及文字 */
+    .brand-header {
+        margin-top: 25px;
+        align-self: flex-start;
+        margin-left: 25px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    /* 替换为图1 扩字图标 */
+    .brand-icon-img {
+        width: 20px;
+        height: 20px;
+        object-fit: contain;
+    }
+    .brand-text {
+        color: #fff;
+        font-size: 14px;
+        letter-spacing: 1px;
+        font-weight: 500;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+
+    /* 主标题 */
+    .main-title {
+        margin-top: 40px;
+        font-size: 34px;
+        font-weight: 900;
+        color: #fff;
+        letter-spacing: 2px;
+        text-shadow: 
+            0px 2px 0px #4567C9,
+            0px 4px 10px rgba(0,0,0,0.15);
+        font-style: italic;
+    }
+
+    /* 副标题 */
+    .sub-title-wrapper {
+        margin-top: 15px;
+        position: relative;
+    }
+    .sub-title-bg {
+        background: rgba(255,255,255,0.15);
+        padding: 5px 15px;
+        border-radius: 20px;
+        color: #fff;
+        font-size: 13px;
+        letter-spacing: 1px;
+        font-weight: 500;
+    }
+
+    /* 数据卡片 */
+    .card-container {
+        margin-top: 40px;
+        width: 85%;
+        background: rgba(255, 255, 255, 0.45);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 25px 20px 35px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        position: relative;
+        z-index: 2;
+    }
+
+    /* 用户信息行 */
+    .user-info {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 35px;
+    }
+    .user-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .avatar {
+        width: 44px;
+        height: 44px;
+        background: #fff;
+        border-radius: 50%;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .user-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: #2C3E50;
+    }
+    .change-avatar {
+        font-size: 12px;
+        color: #4A6EE0;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    /* 数据统计区域 */
+    .stats-container {
+        display: flex;
+        justify-content: space-around;
+        text-align: center;
+    }
+    .stat-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        width: 85px;
+    }
+    
+    /* 替换为图4 底座图片 */
+    .podium-img {
+        width: 70px;
+        height: auto;
+        object-fit: contain;
+        margin-top: 15px; /* 给上方的数字留出空间 */
+        margin-bottom: 8px;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* 数字文字 */
+    .stat-number {
+        position: absolute;
+        top: 0px; /* 调整数字在底座上方的高度 */
+        font-size: 28px;
+        font-weight: 600;
+        color: #2B4C9A;
+        font-family: Arial, sans-serif;
+        z-index: 2;
+    }
+
+    /* 标签文字 */
+    .stat-label {
+        font-size: 12px;
+        color: #4F6BB4;
+        font-weight: 500;
+        margin-top: 5px;
+    }
+
+</style>
+</head>
+<body>
+
+<div class="phone-mockup">
+    <!-- 状态栏 -->
+    <div class="status-bar">
+        <div>9:41 AM</div>
+        <div class="status-icons">
+            <div class="signal-bars">
+                <div></div><div></div><div></div><div></div>
+            </div>
+            <svg width="14" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
+            <div class="battery">
+                <div class="battery-level"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 导航栏 -->
+    <div class="nav-bar">
+        <!-- 替换为图2 返回箭头 -->
+        <img src="2.png" alt="返回" class="back-btn-img">
+        
+        <div class="nav-title">
+            扩扩帮
+            <!-- 替换为图3 喇叭图标 -->
+            <img src="3.png" alt="广播" class="broadcast-icon">
+        </div>
+        
+        <div class="nav-actions">
+            <div class="more-dots">
+                <span></span><span></span><span></span>
+            </div>
+            <div class="circle-btn"></div>
+        </div>
+    </div>
+
+    <!-- 蓝色主背景区 (图5已在CSS中设置为背景) -->
+    <div class="blue-bg">
+
+        <!-- 品牌 Logo -->
+        <div class="brand-header">
+            <!-- 替换为图1 扩字图标 -->
+            <img src="1.png" alt="扩" class="brand-icon-img">
+            <div class="brand-text">扩扩帮</div>
+        </div>
+
+        <!-- 大标题 -->
+        <div class="main-title">有问题,找朋友！</div>
+
+        <!-- 副标题 -->
+        <div class="sub-title-wrapper">
+            <div class="sub-title-bg">真朋友，更愿意一起解决问题</div>
+        </div>
+
+        <!-- 数据卡片 -->
+        <div class="card-container">
+            <!-- 用户信息 -->
+            <div class="user-info">
+                <div class="user-left">
+                    <div class="avatar"></div>
+                    <div class="user-name">李雷 的能力图</div>
+                </div>
+                <a href="#" class="change-avatar">更换头像&gt;</a>
+            </div>
+
+            <!-- 数据统计 -->
+            <div class="stats-container">
+                <!-- 第一项 -->
+                <div class="stat-item">
+                    <div class="stat-number">10</div>
+                    <!-- 替换为图4 底座图片 -->
+                    <img src="4.png" alt="底座" class="podium-img">
+                    <div class="stat-label">可求助好友</div>
+                </div>
+
+                <!-- 第二项 -->
+                <div class="stat-item">
+                    <div class="stat-number">10</div>
+                    <!-- 替换为图4 底座图片 -->
+                    <img src="4.png" alt="底座" class="podium-img">
+                    <div class="stat-label">可提供帮助</div>
+                </div>
+
+                <!-- 第三项 -->
+                <div class="stat-item">
+                    <div class="stat-number">0</div>
+                    <!-- 替换为图4 底座图片 -->
+                    <img src="4.png" alt="底座" class="podium-img">
+                    <div class="stat-label">获得点赞</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
