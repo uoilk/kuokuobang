@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>扩扩帮</title>
 <style>
     /* 基础重置 */
@@ -10,28 +10,30 @@
         box-sizing: border-box;
         margin: 0;
         padding: 0;
+        -webkit-tap-highlight-color: transparent;
     }
 
     body {
-        background-color: #e0e0e0;
+        background-color: #f5f5f5; /* 页面外部背景色 */
         display: flex;
         justify-content: center;
-        align-items: center;
         min-height: 100vh;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
-    /* 手机外框模拟 */
+    /* 手机屏幕模拟（为了在电脑上看也像手机，如果在手机上打开会自动铺满） */
     .phone-mockup {
-        width: 375px;
-        height: 812px;
+        width: 100%;
+        max-width: 414px; /* 限制最大宽度 */
+        min-height: 100vh;
         background-color: #fff;
         position: relative;
-        overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
     }
 
-    /* 顶部状态栏模拟 */
+    /* 顶部状态栏模拟 (仅作装饰) */
     .status-bar {
         display: flex;
         justify-content: space-between;
@@ -45,45 +47,15 @@
         gap: 5px;
         align-items: center;
     }
-    .signal-bars {
-        display: flex;
-        align-items: flex-end;
-        gap: 2px;
-        height: 10px;
-    }
-    .signal-bars div {
-        width: 3px;
-        background-color: #000;
-        border-radius: 1px;
-    }
+    .signal-bars { display: flex; align-items: flex-end; gap: 2px; height: 10px; }
+    .signal-bars div { width: 3px; background-color: #000; border-radius: 1px; }
     .signal-bars div:nth-child(1) { height: 4px; }
     .signal-bars div:nth-child(2) { height: 6px; }
     .signal-bars div:nth-child(3) { height: 8px; }
     .signal-bars div:nth-child(4) { height: 10px; }
-    .battery {
-        width: 22px;
-        height: 10px;
-        border: 1px solid #000;
-        border-radius: 3px;
-        position: relative;
-        padding: 1px;
-    }
-    .battery::after {
-        content: '';
-        position: absolute;
-        right: -3px;
-        top: 2px;
-        width: 2px;
-        height: 4px;
-        background: #000;
-        border-radius: 0 1px 1px 0;
-    }
-    .battery-level {
-        width: 90%;
-        height: 100%;
-        background: #000;
-        border-radius: 1px;
-    }
+    .battery { width: 22px; height: 10px; border: 1px solid #000; border-radius: 3px; position: relative; padding: 1px; }
+    .battery::after { content: ''; position: absolute; right: -3px; top: 2px; width: 2px; height: 4px; background: #000; border-radius: 0 1px 1px 0; }
+    .battery-level { width: 90%; height: 100%; background: #000; border-radius: 1px; }
 
     /* 导航栏 */
     .nav-bar {
@@ -96,12 +68,7 @@
         position: relative;
         z-index: 10;
     }
-    .back-btn-img {
-        width: 12px;
-        height: 20px;
-        object-fit: contain;
-        margin-left: 5px;
-    }
+    .back-btn-img { width: 12px; height: 20px; object-fit: contain; margin-left: 5px; }
     .nav-title {
         font-size: 17px;
         font-weight: 500;
@@ -110,12 +77,8 @@
         align-items: center;
         gap: 5px;
     }
-    /* 新增：右侧广播图标样式 */
-    .broadcast-icon {
-        width: 18px;
-        height: 18px;
-        object-fit: contain;
-    }
+    .broadcast-icon { width: 18px; height: 18px; object-fit: contain; }
+    
     .nav-actions {
         display: flex;
         align-items: center;
@@ -125,48 +88,24 @@
         padding: 4px 8px;
         background: #f8f8f8;
     }
-    .more-dots {
-        display: flex;
-        gap: 2px;
-    }
-    .more-dots span {
-        width: 3px;
-        height: 3px;
-        background: #333;
-        border-radius: 50%;
-    }
-    .circle-btn {
-        width: 14px;
-        height: 14px;
-        border: 2px solid #333;
-        border-radius: 50%;
-        position: relative;
-    }
-    .circle-btn::after {
-        content: '';
-        position: absolute;
-        top: 50%; left: 50%;
-        transform: translate(-50%, -50%);
-        width: 4px;
-        height: 4px;
-        background: #333;
-        border-radius: 50%;
-    }
+    .more-dots { display: flex; gap: 2px; }
+    .more-dots span { width: 3px; height: 3px; background: #333; border-radius: 50%; }
+    .circle-btn { width: 14px; height: 14px; border: 2px solid #333; border-radius: 50%; position: relative; }
+    .circle-btn::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 4px; height: 4px; background: #333; border-radius: 50%; }
 
-    /* 蓝色背景区域 - 替换为图5背景底纹 */
+    /* 蓝色背景区域 - 图5背景底纹 */
     .blue-bg {
-        /* 保留渐变作为备用，同时叠加图5 */
-        background: linear-gradient(180deg, #7B9FF9 0%, #8DB2FC 100%);
+        background-color: #7B9FF9;
         background-image: url('5.png');
         background-size: cover;
-        background-position: center;
+        background-position: center top;
         background-repeat: no-repeat;
-        height: calc(100% - 95px);
-        position: relative;
-        overflow: hidden;
+        /* 设计要求：下半部分留白。所以高度自适应内容，不写死100% */
+        padding-bottom: 50px; 
         display: flex;
         flex-direction: column;
         align-items: center;
+        position: relative;
     }
 
     /* 顶部 Logo 及文字 */
@@ -178,12 +117,7 @@
         align-items: center;
         gap: 6px;
     }
-    /* 替换为图1 扩字图标 */
-    .brand-icon-img {
-        width: 20px;
-        height: 20px;
-        object-fit: contain;
-    }
+    .brand-icon-img { width: 20px; height: 20px; object-fit: contain; }
     .brand-text {
         color: #fff;
         font-size: 14px;
@@ -194,22 +128,17 @@
 
     /* 主标题 */
     .main-title {
-        margin-top: 40px;
-        font-size: 34px;
+        margin-top: 30px;
+        font-size: 32px;
         font-weight: 900;
         color: #fff;
-        letter-spacing: 2px;
-        text-shadow: 
-            0px 2px 0px #4567C9,
-            0px 4px 10px rgba(0,0,0,0.15);
+        letter-spacing: 1px;
+        text-shadow: 0px 2px 0px #4567C9, 0px 4px 10px rgba(0,0,0,0.15);
         font-style: italic;
     }
 
     /* 副标题 */
-    .sub-title-wrapper {
-        margin-top: 15px;
-        position: relative;
-    }
+    .sub-title-wrapper { margin-top: 15px; position: relative; }
     .sub-title-bg {
         background: rgba(255,255,255,0.15);
         padding: 5px 15px;
@@ -222,7 +151,7 @@
 
     /* 数据卡片 */
     .card-container {
-        margin-top: 40px;
+        margin-top: 35px;
         width: 85%;
         background: rgba(255, 255, 255, 0.45);
         backdrop-filter: blur(10px);
@@ -246,24 +175,56 @@
         display: flex;
         align-items: center;
         gap: 12px;
+        flex: 1; /* 让左边占据更多空间 */
+        overflow: hidden; /* 防止名字太长撑破 */
     }
-    .avatar {
+    
+    /* 头像容器，用于展示上传的图片 */
+    .avatar-container {
         width: 44px;
         height: 44px;
         background: #fff;
         border-radius: 50%;
         box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        overflow: hidden;
+        flex-shrink: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
+    .avatar-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: none; /* 默认隐藏，上传后显示 */
+    }
+
+    /* 可编辑的昵称 */
     .user-name {
         font-size: 16px;
         font-weight: 600;
         color: #2C3E50;
+        outline: none;
+        border-bottom: 1px dashed transparent;
+        max-width: 120px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
-    .change-avatar {
+    .user-name:focus {
+        border-bottom-color: #4A6EE0;
+    }
+
+    /* 更换头像按钮（隐藏 input） */
+    .change-avatar-btn {
         font-size: 12px;
         color: #4A6EE0;
         font-weight: 500;
-        text-decoration: none;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+    #fileInput {
+        display: none;
     }
 
     /* 数据统计区域 */
@@ -280,12 +241,12 @@
         width: 85px;
     }
     
-    /* 替换为图4 底座图片 */
+    /* 图4 底座图片 */
     .podium-img {
         width: 70px;
         height: auto;
         object-fit: contain;
-        margin-top: 15px; /* 给上方的数字留出空间 */
+        margin-top: 15px;
         margin-bottom: 8px;
         position: relative;
         z-index: 1;
@@ -294,8 +255,8 @@
     /* 数字文字 */
     .stat-number {
         position: absolute;
-        top: 0px; /* 调整数字在底座上方的高度 */
-        font-size: 28px;
+        top: 0px;
+        font-size: 26px;
         font-weight: 600;
         color: #2B4C9A;
         font-family: Arial, sans-serif;
@@ -310,6 +271,13 @@
         margin-top: 5px;
     }
 
+    /* 底部留白区（按设计要求） */
+    .bottom-blank-area {
+        flex: 1;
+        background-color: #fff;
+        width: 100%;
+        min-height: 200px;
+    }
 </style>
 </head>
 <body>
@@ -331,29 +299,21 @@
 
     <!-- 导航栏 -->
     <div class="nav-bar">
-        <!-- 替换为图2 返回箭头 -->
         <img src="2.png" alt="返回" class="back-btn-img">
-        
         <div class="nav-title">
             扩扩帮
-            <!-- 替换为图3 喇叭图标 -->
             <img src="3.png" alt="广播" class="broadcast-icon">
         </div>
-        
         <div class="nav-actions">
-            <div class="more-dots">
-                <span></span><span></span><span></span>
-            </div>
+            <div class="more-dots"><span></span><span></span><span></span></div>
             <div class="circle-btn"></div>
         </div>
     </div>
 
-    <!-- 蓝色主背景区 (图5已在CSS中设置为背景) -->
+    <!-- 蓝色主背景区 -->
     <div class="blue-bg">
-
         <!-- 品牌 Logo -->
         <div class="brand-header">
-            <!-- 替换为图1 扩字图标 -->
             <img src="1.png" alt="扩" class="brand-icon-img">
             <div class="brand-text">扩扩帮</div>
         </div>
@@ -371,10 +331,18 @@
             <!-- 用户信息 -->
             <div class="user-info">
                 <div class="user-left">
-                    <div class="avatar"></div>
-                    <div class="user-name">李雷 的能力图</div>
+                    <!-- 头像显示容器 -->
+                    <div class="avatar-container">
+                        <img id="avatarImg" src="" alt="头像">
+                    </div>
+                    <!-- 昵称输入（contenteditable 实现直接点击修改） -->
+                    <div class="user-name" contenteditable="true" spellcheck="false">李雷</div>
+                    <span style="font-size: 14px; font-weight: 600; color: #2C3E50;">的能力图</span>
                 </div>
-                <a href="#" class="change-avatar">更换头像&gt;</a>
+                
+                <!-- 更换头像按钮及隐藏的 input -->
+                <label for="fileInput" class="change-avatar-btn">更换头像&gt;</label>
+                <input type="file" id="fileInput" accept="image/*">
             </div>
 
             <!-- 数据统计 -->
@@ -382,7 +350,6 @@
                 <!-- 第一项 -->
                 <div class="stat-item">
                     <div class="stat-number">10</div>
-                    <!-- 替换为图4 底座图片 -->
                     <img src="4.png" alt="底座" class="podium-img">
                     <div class="stat-label">可求助好友</div>
                 </div>
@@ -390,7 +357,6 @@
                 <!-- 第二项 -->
                 <div class="stat-item">
                     <div class="stat-number">10</div>
-                    <!-- 替换为图4 底座图片 -->
                     <img src="4.png" alt="底座" class="podium-img">
                     <div class="stat-label">可提供帮助</div>
                 </div>
@@ -398,14 +364,50 @@
                 <!-- 第三项 -->
                 <div class="stat-item">
                     <div class="stat-number">0</div>
-                    <!-- 替换为图4 底座图片 -->
                     <img src="4.png" alt="底座" class="podium-img">
                     <div class="stat-label">获得点赞</div>
                 </div>
             </div>
         </div>
     </div>
+    
+    <!-- 按要求：下半部分留白区域 -->
+    <div class="bottom-blank-area"></div>
 </div>
+
+<!-- 核心交互逻辑 -->
+<script>
+    // 获取 DOM 元素
+    const fileInput = document.getElementById('fileInput');
+    const avatarImg = document.getElementById('avatarImg');
+    const avatarContainer = document.querySelector('.avatar-container');
+
+    // 监听文件选择事件
+    fileInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        
+        if (file) {
+            // 验证是否是图片
+            if (!file.type.startsWith('image/')) {
+                alert('请上传图片格式的文件！');
+                return;
+            }
+
+            // 使用 FileReader 读取本地图片（不需要上传服务器）
+            const reader = new FileReader();
+            
+            reader.onload = function(event) {
+                // 将读取到的 Base64 图片路径赋值给 img 标签
+                avatarImg.src = event.target.result;
+                avatarImg.style.display = 'block'; // 显示图片
+                avatarContainer.style.background = 'transparent'; // 去掉原本的白色背景
+            };
+            
+            // 读取为 Data URL (Base64)
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
 
 </body>
 </html>
