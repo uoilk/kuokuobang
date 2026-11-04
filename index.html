@@ -2,6 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
+<!-- 关键：防止手机端缩放，让页面像 App 一样 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>扩扩帮</title>
 <style>
@@ -10,21 +11,21 @@
         box-sizing: border-box;
         margin: 0;
         padding: 0;
-        -webkit-tap-highlight-color: transparent;
+        -webkit-tap-highlight-color: transparent; /* 去除手机点击时的蓝色高亮 */
     }
 
     body {
-        background-color: #f5f5f5; /* 页面外部背景色 */
+        background-color: #f5f5f5;
         display: flex;
         justify-content: center;
         min-height: 100vh;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
-    /* 手机屏幕模拟（为了在电脑上看也像手机，如果在手机上打开会自动铺满） */
+    /* 手机屏幕模拟 */
     .phone-mockup {
         width: 100%;
-        max-width: 414px; /* 限制最大宽度 */
+        max-width: 414px;
         min-height: 100vh;
         background-color: #fff;
         position: relative;
@@ -33,20 +34,11 @@
         flex-direction: column;
     }
 
-    /* 顶部状态栏模拟 (仅作装饰) */
+    /* 状态栏 (装饰) */
     .status-bar {
-        display: flex;
-        justify-content: space-between;
-        padding: 12px 20px 5px;
-        font-size: 12px;
-        font-weight: 500;
-        color: #000;
+        display: flex; justify-content: space-between; padding: 12px 20px 5px; font-size: 12px; font-weight: 500; color: #000;
     }
-    .status-icons {
-        display: flex;
-        gap: 5px;
-        align-items: center;
-    }
+    .status-icons { display: flex; gap: 5px; align-items: center; }
     .signal-bars { display: flex; align-items: flex-end; gap: 2px; height: 10px; }
     .signal-bars div { width: 3px; background-color: #000; border-radius: 1px; }
     .signal-bars div:nth-child(1) { height: 4px; }
@@ -59,48 +51,24 @@
 
     /* 导航栏 */
     .nav-bar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 5px 15px;
-        height: 44px;
-        background: #fff;
-        position: relative;
-        z-index: 10;
+        display: flex; justify-content: space-between; align-items: center; padding: 5px 15px; height: 44px; background: #fff; position: relative; z-index: 10;
     }
     .back-btn-img { width: 12px; height: 20px; object-fit: contain; margin-left: 5px; }
-    .nav-title {
-        font-size: 17px;
-        font-weight: 500;
-        color: #333;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-    }
+    .nav-title { font-size: 17px; font-weight: 500; color: #333; display: flex; align-items: center; gap: 5px; }
     .broadcast-icon { width: 18px; height: 18px; object-fit: contain; }
-    
-    .nav-actions {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        border: 1px solid #ddd;
-        border-radius: 20px;
-        padding: 4px 8px;
-        background: #f8f8f8;
-    }
+    .nav-actions { display: flex; align-items: center; gap: 10px; border: 1px solid #ddd; border-radius: 20px; padding: 4px 8px; background: #f8f8f8; }
     .more-dots { display: flex; gap: 2px; }
     .more-dots span { width: 3px; height: 3px; background: #333; border-radius: 50%; }
     .circle-btn { width: 14px; height: 14px; border: 2px solid #333; border-radius: 50%; position: relative; }
     .circle-btn::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 4px; height: 4px; background: #333; border-radius: 50%; }
 
-    /* 蓝色背景区域 - 图5背景底纹 */
+    /* 蓝色主背景区 */
     .blue-bg {
         background-color: #7B9FF9;
         background-image: url('5.png');
         background-size: cover;
         background-position: center top;
         background-repeat: no-repeat;
-        /* 设计要求：下半部分留白。所以高度自适应内容，不写死100% */
         padding-bottom: 50px; 
         display: flex;
         flex-direction: column;
@@ -108,31 +76,14 @@
         position: relative;
     }
 
-    /* 顶部 Logo 及文字 */
-    .brand-header {
-        margin-top: 25px;
-        align-self: flex-start;
-        margin-left: 25px;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
+    /* 顶部 Logo */
+    .brand-header { margin-top: 25px; align-self: flex-start; margin-left: 25px; display: flex; align-items: center; gap: 6px; }
     .brand-icon-img { width: 20px; height: 20px; object-fit: contain; }
-    .brand-text {
-        color: #fff;
-        font-size: 14px;
-        letter-spacing: 1px;
-        font-weight: 500;
-        text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    }
+    .brand-text { color: #fff; font-size: 14px; letter-spacing: 1px; font-weight: 500; text-shadow: 0 1px 2px rgba(0,0,0,0.1); }
 
     /* 主标题 */
     .main-title {
-        margin-top: 30px;
-        font-size: 32px;
-        font-weight: 900;
-        color: #fff;
-        letter-spacing: 1px;
+        margin-top: 30px; font-size: 32px; font-weight: 900; color: #fff; letter-spacing: 1px;
         text-shadow: 0px 2px 0px #4567C9, 0px 4px 10px rgba(0,0,0,0.15);
         font-style: italic;
     }
@@ -140,144 +91,68 @@
     /* 副标题 */
     .sub-title-wrapper { margin-top: 15px; position: relative; }
     .sub-title-bg {
-        background: rgba(255,255,255,0.15);
-        padding: 5px 15px;
-        border-radius: 20px;
-        color: #fff;
-        font-size: 13px;
-        letter-spacing: 1px;
-        font-weight: 500;
+        background: rgba(255,255,255,0.15); padding: 5px 15px; border-radius: 20px; color: #fff; font-size: 13px; letter-spacing: 1px; font-weight: 500;
     }
 
     /* 数据卡片 */
     .card-container {
-        margin-top: 35px;
-        width: 85%;
-        background: rgba(255, 255, 255, 0.45);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 25px 20px 35px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.5);
-        position: relative;
-        z-index: 2;
+        margin-top: 35px; width: 88%; background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+        border-radius: 20px; padding: 20px 15px 35px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05); border: 1px solid rgba(255, 255, 255, 0.5); position: relative; z-index: 2;
     }
 
     /* 用户信息行 */
     .user-info {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 35px;
+        display: flex; align-items: center; justify-content: space-between; margin-bottom: 35px;
     }
     .user-left {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        flex: 1; /* 让左边占据更多空间 */
-        overflow: hidden; /* 防止名字太长撑破 */
+        display: flex; align-items: center; gap: 8px; flex: 1; overflow: hidden;
     }
     
-    /* 头像容器，用于展示上传的图片 */
+    /* 头像容器 */
     .avatar-container {
-        width: 44px;
-        height: 44px;
-        background: #fff;
-        border-radius: 50%;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        overflow: hidden;
-        flex-shrink: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        width: 44px; height: 44px; background: #fff; border-radius: 50%; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        overflow: hidden; flex-shrink: 0; display: flex; justify-content: center; align-items: center;
     }
     .avatar-container img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: none; /* 默认隐藏，上传后显示 */
+        width: 100%; height: 100%; object-fit: cover; display: none;
     }
 
-    /* 可编辑的昵称 */
+    /* 名字与后缀的包裹容器 */
+    .name-wrapper {
+        display: flex; align-items: center; font-size: 15px; font-weight: 600; color: #2C3E50; flex-wrap: nowrap;
+    }
+
+    /* 可编辑的昵称（移动端优化） */
     .user-name {
-        font-size: 16px;
-        font-weight: 600;
-        color: #2C3E50;
         outline: none;
-        border-bottom: 1px dashed transparent;
-        max-width: 120px;
+        border-bottom: 1px dashed #999;
+        min-width: 30px;
+        max-width: 80px; /* 限制长度防止撑破 */
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        padding: 2px 4px; /* 增加点击区域 */
     }
     .user-name:focus {
         border-bottom-color: #4A6EE0;
+        background: rgba(255,255,255,0.5);
     }
 
-    /* 更换头像按钮（隐藏 input） */
+    /* 更换头像按钮 */
     .change-avatar-btn {
-        font-size: 12px;
-        color: #4A6EE0;
-        font-weight: 500;
-        cursor: pointer;
-        flex-shrink: 0;
+        font-size: 12px; color: #4A6EE0; font-weight: 500; cursor: pointer; flex-shrink: 0; margin-left: 5px;
     }
-    #fileInput {
-        display: none;
-    }
+    #fileInput { display: none; }
 
     /* 数据统计区域 */
-    .stats-container {
-        display: flex;
-        justify-content: space-around;
-        text-align: center;
-    }
-    .stat-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        position: relative;
-        width: 85px;
-    }
-    
-    /* 图4 底座图片 */
-    .podium-img {
-        width: 70px;
-        height: auto;
-        object-fit: contain;
-        margin-top: 15px;
-        margin-bottom: 8px;
-        position: relative;
-        z-index: 1;
-    }
+    .stats-container { display: flex; justify-content: space-around; text-align: center; }
+    .stat-item { display: flex; flex-direction: column; align-items: center; position: relative; width: 30%; }
+    .podium-img { width: 100%; max-width: 65px; height: auto; object-fit: contain; margin-top: 12px; margin-bottom: 8px; position: relative; z-index: 1; }
+    .stat-number { position: absolute; top: -2px; font-size: 24px; font-weight: 600; color: #2B4C9A; font-family: Arial, sans-serif; z-index: 2; }
+    .stat-label { font-size: 12px; color: #4F6BB4; font-weight: 500; margin-top: 5px; white-space: nowrap; }
 
-    /* 数字文字 */
-    .stat-number {
-        position: absolute;
-        top: 0px;
-        font-size: 26px;
-        font-weight: 600;
-        color: #2B4C9A;
-        font-family: Arial, sans-serif;
-        z-index: 2;
-    }
-
-    /* 标签文字 */
-    .stat-label {
-        font-size: 12px;
-        color: #4F6BB4;
-        font-weight: 500;
-        margin-top: 5px;
-    }
-
-    /* 底部留白区（按设计要求） */
-    .bottom-blank-area {
-        flex: 1;
-        background-color: #fff;
-        width: 100%;
-        min-height: 200px;
-    }
+    /* 底部留白区 */
+    .bottom-blank-area { flex: 1; background-color: #fff; width: 100%; min-height: 200px; }
 </style>
 </head>
 <body>
@@ -287,23 +162,16 @@
     <div class="status-bar">
         <div>9:41 AM</div>
         <div class="status-icons">
-            <div class="signal-bars">
-                <div></div><div></div><div></div><div></div>
-            </div>
+            <div class="signal-bars"><div></div><div></div><div></div><div></div></div>
             <svg width="14" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
-            <div class="battery">
-                <div class="battery-level"></div>
-            </div>
+            <div class="battery"><div class="battery-level"></div></div>
         </div>
     </div>
 
     <!-- 导航栏 -->
     <div class="nav-bar">
         <img src="2.png" alt="返回" class="back-btn-img">
-        <div class="nav-title">
-            扩扩帮
-            <img src="3.png" alt="广播" class="broadcast-icon">
-        </div>
+        <div class="nav-title">扩扩帮 <img src="3.png" alt="广播" class="broadcast-icon"></div>
         <div class="nav-actions">
             <div class="more-dots"><span></span><span></span><span></span></div>
             <div class="circle-btn"></div>
@@ -312,56 +180,47 @@
 
     <!-- 蓝色主背景区 -->
     <div class="blue-bg">
-        <!-- 品牌 Logo -->
         <div class="brand-header">
             <img src="1.png" alt="扩" class="brand-icon-img">
             <div class="brand-text">扩扩帮</div>
         </div>
 
-        <!-- 大标题 -->
         <div class="main-title">有问题,找朋友！</div>
 
-        <!-- 副标题 -->
         <div class="sub-title-wrapper">
             <div class="sub-title-bg">真朋友，更愿意一起解决问题</div>
         </div>
 
         <!-- 数据卡片 -->
         <div class="card-container">
-            <!-- 用户信息 -->
             <div class="user-info">
                 <div class="user-left">
-                    <!-- 头像显示容器 -->
+                    <!-- 头像 -->
                     <div class="avatar-container">
                         <img id="avatarImg" src="" alt="头像">
                     </div>
-                    <!-- 昵称输入（contenteditable 实现直接点击修改） -->
-                    <div class="user-name" contenteditable="true" spellcheck="false">李雷</div>
-                    <span style="font-size: 14px; font-weight: 600; color: #2C3E50;">的能力图</span>
+                    <!-- 名字区域（重新排版，适合手机点击） -->
+                    <div class="name-wrapper">
+                        <span class="user-name" id="userName" contenteditable="true" inputmode="text" spellcheck="false">李雷</span>
+                        <span>的能力图</span>
+                    </div>
                 </div>
-                
-                <!-- 更换头像按钮及隐藏的 input -->
+                <!-- 触发按钮与隐藏输入框 -->
                 <label for="fileInput" class="change-avatar-btn">更换头像&gt;</label>
                 <input type="file" id="fileInput" accept="image/*">
             </div>
 
-            <!-- 数据统计 -->
             <div class="stats-container">
-                <!-- 第一项 -->
                 <div class="stat-item">
                     <div class="stat-number">10</div>
                     <img src="4.png" alt="底座" class="podium-img">
                     <div class="stat-label">可求助好友</div>
                 </div>
-
-                <!-- 第二项 -->
                 <div class="stat-item">
                     <div class="stat-number">10</div>
                     <img src="4.png" alt="底座" class="podium-img">
                     <div class="stat-label">可提供帮助</div>
                 </div>
-
-                <!-- 第三项 -->
                 <div class="stat-item">
                     <div class="stat-number">0</div>
                     <img src="4.png" alt="底座" class="podium-img">
@@ -371,40 +230,33 @@
         </div>
     </div>
     
-    <!-- 按要求：下半部分留白区域 -->
     <div class="bottom-blank-area"></div>
 </div>
 
-<!-- 核心交互逻辑 -->
 <script>
-    // 获取 DOM 元素
     const fileInput = document.getElementById('fileInput');
     const avatarImg = document.getElementById('avatarImg');
     const avatarContainer = document.querySelector('.avatar-container');
+    const userName = document.getElementById('userName');
 
-    // 监听文件选择事件
+    // 点击名字时，强制唤醒手机软键盘
+    userName.addEventListener('click', function() {
+        this.focus();
+    });
+
+    // 头像上传逻辑
     fileInput.addEventListener('change', function(e) {
         const file = e.target.files[0];
-        
-        if (file) {
-            // 验证是否是图片
-            if (!file.type.startsWith('image/')) {
-                alert('请上传图片格式的文件！');
-                return;
-            }
-
-            // 使用 FileReader 读取本地图片（不需要上传服务器）
+        if (file && file.type.startsWith('image/')) {
             const reader = new FileReader();
-            
             reader.onload = function(event) {
-                // 将读取到的 Base64 图片路径赋值给 img 标签
                 avatarImg.src = event.target.result;
-                avatarImg.style.display = 'block'; // 显示图片
-                avatarContainer.style.background = 'transparent'; // 去掉原本的白色背景
+                avatarImg.style.display = 'block';
+                avatarContainer.style.background = 'transparent';
             };
-            
-            // 读取为 Data URL (Base64)
             reader.readAsDataURL(file);
+        } else if (file) {
+            alert('请选择图片文件');
         }
     });
 </script>
